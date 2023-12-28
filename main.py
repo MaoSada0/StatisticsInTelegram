@@ -49,6 +49,8 @@ def func(data, nickname):
 
                     if ('date' in message):
                         year = int((message['date'])[:4], 10)
+                        if(year < 2019):
+                            continue
 
                     if ('text' in message and len(message['text']) >= 1):
                         countTextMessages += 1
