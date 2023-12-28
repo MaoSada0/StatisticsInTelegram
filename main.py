@@ -49,8 +49,6 @@ def func(data, nickname):
 
                     if ('date' in message):
                         year = int((message['date'])[:4], 10)
-                        if(year < 2019):
-                            continue
 
                     if ('text' in message and len(message['text']) >= 1):
                         countTextMessages += 1
@@ -63,11 +61,13 @@ def func(data, nickname):
                     else:
                         countAnother += 1
 
-                    new_stats[2023 - year]["countTextMessages"] += countTextMessages
-                    new_stats[2023 - year]["countAudioMessages"] += countAudioMessages
-                    new_stats[2023 - year]["countVideoMessages"] += countVideoMessages
-                    new_stats[2023 - year]["countStickerMessages"] += countStickerMessages
-                    new_stats[2023 - year]["countAnother"] += countAnother
+
+                    if(year >= 2019 and year <= 2023):
+                        new_stats[2023 - year]["countTextMessages"] += countTextMessages
+                        new_stats[2023 - year]["countAudioMessages"] += countAudioMessages
+                        new_stats[2023 - year]["countVideoMessages"] += countVideoMessages
+                        new_stats[2023 - year]["countStickerMessages"] += countStickerMessages
+                        new_stats[2023 - year]["countAnother"] += countAnother
 
                     countTextMessages = 0
                     countAudioMessages = 0
