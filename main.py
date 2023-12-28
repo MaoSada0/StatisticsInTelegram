@@ -36,7 +36,7 @@ def func(data, nickname):
                 else:
                     new_chat = "Чат: " + str(chat['name'])
             else:
-                new_chat = "None"
+                new_chat = chat['type']
 
             new_stats2023 = {"countTextMessages": 0, "countAudioMessages": 0, "countVideoMessages": 0, "countStickerMessages": 0, "countAnother": 0, "all": 0}
             new_stats2022 = {"countTextMessages": 0, "countAudioMessages": 0, "countVideoMessages": 0, "countStickerMessages": 0, "countAnother": 0, "all": 0}
@@ -114,6 +114,25 @@ def func(data, nickname):
                 sum += values[1]
 
             print(colors.GREEN + "Общая сумма сообщений: " + str(sum) + colors.END)
+
+        count = 1
+        k = 0
+        sum = 0
+
+        with open('output.txt', 'w', encoding='utf-8') as file:
+            for x in years:
+                count = 1
+                file.write("Год: " + str(2023 - k) + "\n")
+                k += 1
+                x = sorted(x, key=lambda x: x[1], reverse=True)
+                sum = 0
+                for values in x:
+                    if values[1] > 10:
+                        file.write(f"Топ {count} {values[0]}: {values[1]}\n")
+                        count += 1
+                    sum += values[1]
+
+                file.write(f"Общая сумма сообщений: {sum}\n\n")
 
 
 if __name__ == "__main__":
