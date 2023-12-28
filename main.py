@@ -29,13 +29,14 @@ def func(data, nickname):
 
     if 'chats' in data and 'list' in data['chats']:
         for chat in data['chats']['list']:
-            if chat['type'] == 'private_supergroup' or chat['type'] == 'saved_messages':
-                continue
 
-            if chat['type'] == 'personal_chat':
-                new_chat = "Диалог с " + str(chat['name'])
+            if("name" in chat):
+                if chat['type'] == 'personal_chat':
+                    new_chat = "Диалог с " + str(chat['name'])
+                else:
+                    new_chat = "Чат: " + str(chat['name'])
             else:
-                new_chat = "Чат: " + str(chat['name'])
+                new_chat = "None"
 
             new_stats2023 = {"countTextMessages": 0, "countAudioMessages": 0, "countVideoMessages": 0, "countStickerMessages": 0, "countAnother": 0, "all": 0}
             new_stats2022 = {"countTextMessages": 0, "countAudioMessages": 0, "countVideoMessages": 0, "countStickerMessages": 0, "countAnother": 0, "all": 0}
