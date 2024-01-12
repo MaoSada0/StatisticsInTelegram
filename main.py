@@ -38,16 +38,18 @@ def func(data, nickname):
             else:
                 new_chat = chat['type']
 
+            new_stats2024 = {"countTextMessages": 0, "countAudioMessages": 0, "countVideoMessages": 0, "countStickerMessages": 0, "countAnother": 0, "all": 0}
             new_stats2023 = {"countTextMessages": 0, "countAudioMessages": 0, "countVideoMessages": 0, "countStickerMessages": 0, "countAnother": 0, "all": 0}
             new_stats2022 = {"countTextMessages": 0, "countAudioMessages": 0, "countVideoMessages": 0, "countStickerMessages": 0, "countAnother": 0, "all": 0}
             new_stats2021 = {"countTextMessages": 0, "countAudioMessages": 0, "countVideoMessages": 0, "countStickerMessages": 0, "countAnother": 0, "all": 0}
             new_stats2020 = {"countTextMessages": 0, "countAudioMessages": 0, "countVideoMessages": 0, "countStickerMessages": 0, "countAnother": 0, "all": 0}
             new_stats2019 = {"countTextMessages": 0, "countAudioMessages": 0, "countVideoMessages": 0, "countStickerMessages": 0, "countAnother": 0, "all": 0}
 
-            new_stats = [new_stats2023, new_stats2022, new_stats2021, new_stats2020, new_stats2019]
+            new_stats = [new_stats2024, new_stats2023, new_stats2022, new_stats2021, new_stats2020, new_stats2019]
+
+
             for message in chat['messages']:
                 if('from' in message and message['from'] == nickname):
-
                     if ('date' in message):
                         year = int((message['date'])[:4], 10)
 
@@ -63,12 +65,12 @@ def func(data, nickname):
                         countAnother += 1
 
 
-                    if(year >= 2019 and year <= 2023):
-                        new_stats[2023 - year]["countTextMessages"] += countTextMessages
-                        new_stats[2023 - year]["countAudioMessages"] += countAudioMessages
-                        new_stats[2023 - year]["countVideoMessages"] += countVideoMessages
-                        new_stats[2023 - year]["countStickerMessages"] += countStickerMessages
-                        new_stats[2023 - year]["countAnother"] += countAnother
+                    if(year >= 2019 and year <= 2024):
+                        new_stats[2024 - year]["countTextMessages"] += countTextMessages
+                        new_stats[2024 - year]["countAudioMessages"] += countAudioMessages
+                        new_stats[2024 - year]["countVideoMessages"] += countVideoMessages
+                        new_stats[2024 - year]["countStickerMessages"] += countStickerMessages
+                        new_stats[2024 - year]["countAnother"] += countAnother
 
                     countTextMessages = 0
                     countAudioMessages = 0
@@ -81,37 +83,40 @@ def func(data, nickname):
 
             chats_and_stats.append([new_chat, new_stats])
 
-        year2019 = []  # Инициализация как пустого списка
-        year2020 = []  # Инициализация как пустого списка
-        year2021 = []  # Инициализация как пустого списка
-        year2022 = []  # Инициализация как пустого списка
-        year2023 = []  # Инициализация как пустого списка
+        year2019 = []
+        year2020 = []
+        year2021 = []
+        year2022 = []
+        year2023 = []
+        year2024 = []
 
-        years = [year2023, year2022, year2021, year2020, year2019]
+        years = [year2024, year2023, year2022, year2021, year2020, year2019]
 
         for chat, stats in chats_and_stats:
             for i, year_stats in enumerate(stats, start=0):
                 if (year_stats['all'] != 0):
-                    temp = [chat, year_stats['all']]
+                    temp = [chat, year_stats]
                     years[i].append(temp)
-
 
         count = 1
         k = 0
         sum = 0
+
         for x in years:
             count = 1
-            print(colors.RED + "Год: " + str(2023 - k) + colors.END)
+            print(colors.RED + "Год: " + str(2024 - k) + colors.END)
             k += 1
-            x = sorted(x, key=lambda x: x[1], reverse=True)
+            x = sorted(x, key=lambda x: x[1]['all'], reverse=True)
             #print(x)
             sum = 0
             for values in x:
-                if(values[1] > 10):
+                if(values[1]['all'] > 1):
                     print(f"Топ {count}", end=" ")
-                    print(f"{values[0]}: {values[1]}")
+                    print(f"{values[0]}: {values[1]['all']}" + ((70 - len(str(values[0])) - len(str(values[1]['all'])) - len(str(count))) * " ") + f"(из них - гс: {values[1]['countAudioMessages']} | "
+                          f"кружочков: {values[1]['countVideoMessages']} | текст"
+                          f"овых: {values[1]['countTextMessages']} | стикеров: {values[1]['countStickerMessages']})")
                     count += 1
-                sum += values[1]
+                sum += values[1]['all']
 
             print(colors.GREEN + "Общая сумма сообщений: " + str(sum) + colors.END)
 
@@ -122,15 +127,15 @@ def func(data, nickname):
         with open('output.txt', 'w', encoding='utf-8') as file:
             for x in years:
                 count = 1
-                file.write("Год: " + str(2023 - k) + "\n")
+                file.write("Год: " + str(2024 - k) + "\n")
                 k += 1
-                x = sorted(x, key=lambda x: x[1], reverse=True)
+                x = sorted(x, key=lambda x: x[1]['all'], reverse=True)
                 sum = 0
                 for values in x:
-                    if values[1] > 10:
-                        file.write(f"Топ {count} {values[0]}: {values[1]}\n")
+                    if values[1]['all'] > 10:
+                        file.write(f"Топ {count} {values[0]}: {values[1]['all']}\n")
                         count += 1
-                    sum += values[1]
+                    sum += values[1]['all']
 
                 file.write(f"Общая сумма сообщений: {sum}\n\n")
 
